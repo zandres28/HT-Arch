@@ -17,6 +17,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
+ENV PORT=8000
+EXPOSE 8000
+
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
