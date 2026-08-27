@@ -1,5 +1,5 @@
 [variables]
-PHP_VERSION = "8.1"
+PHP_VERSION = "8.3"
 
 [apt]
 aptPackages = ["mysql-client"]
