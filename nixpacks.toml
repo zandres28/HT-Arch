@@ -4,5 +4,13 @@ PHP_VERSION = "8.3"
 [phases.setup]
 nixPkgs = ["mysql-client"]
 
+[phases.install]
+cmds = [
+  "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\"",
+  "php composer-setup.php --install-dir=/usr/local/bin --filename=composer",
+  "php -r \"unlink('composer-setup.php');\"",
+  "composer install --ignore-platform-reqs --no-dev --optimize-autoloader"
+]
+
 [start]
 cmd = "php artisan migrate --force && php artisan db:seed --force && php artisan storage:link --force && php artisan serve --host=0.0.0.0 --port=$PORT"
