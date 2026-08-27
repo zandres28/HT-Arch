@@ -1,0 +1,11 @@
+[variables]
+PHP_VERSION = "8.1"
+
+[apt]
+aptPackages = ["mysql-client"]
+
+[phases.setup]
+nixpacksPhpExtensions = ["pdo_mysql", "gd", "mbstring", "zip", "bcmath"]
+
+[start]
+cmd = "php artisan migrate --force && php artisan db:seed --force && php artisan storage:link --force && php artisan serve --host=0.0.0.0 --port=$PORT"

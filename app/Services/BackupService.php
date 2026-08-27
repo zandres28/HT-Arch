@@ -96,7 +96,7 @@ class BackupService
     {
         $dump = $this->mysqldumpPath();
         if (!$dump) {
-            throw new \RuntimeException('No se encontró mysqldump.exe en el sistema.');
+            throw new \RuntimeException('No se encontró mysqldump en el sistema (debe estar instalado para generar respaldos).');
         }
 
         $cfg = Config::get('database.connections.mysql');
@@ -122,7 +122,7 @@ class BackupService
     {
         $mysql = $this->mysqlPath();
         if (!$mysql) {
-            throw new \RuntimeException('No se encontró mysql.exe en el sistema.');
+            throw new \RuntimeException('No se encontró mysql en el sistema (necesario para restaurar respaldos).');
         }
 
         $cfg = Config::get('database.connections.mysql');
@@ -177,8 +177,11 @@ class BackupService
                 return $path;
             }
         }
-        // Buscar en PATH
-        $which = shell_exec('where ' . $name . ' 2>nul');
+        // Buscar en PATH (where en Windows, which en Linux/macOS)
+        $cmd = PHP_OS_FAMILY === 'Windows'
+            ? 'where ' . $name . ' 2>nul'
+            : 'which ' . $name . ' 2>/dev/null';
+        $which = shell_exec($cmd);
         if ($which) {
             $first = strtok(trim($which), "\n");
             if ($first && is_file($first)) {
